@@ -1,8 +1,8 @@
 # Đồ án lập trình Web 2
 ----
 * **1660265**
- - Huỳnh Ngọc Khánh
- - Số điện thoại: 0947577449
+ ** Huỳnh Ngọc Khánh
+ * Số điện thoại: 0947577449
  - Email: *hngockhanhdhkhtn@gmail.com*
 * **1660309**
  - Hồ Thị Mỹ Linh
