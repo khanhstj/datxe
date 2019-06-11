@@ -13,8 +13,8 @@
  * Số điện thoại: 0337301995
  * Email: *khanhtran.95.k@gmail.com*
  ----
-[Link Demo Youtube](https://wikipedia.org)
+[Link Demo Youtube](https://youtu.be/Eh-RXcPZxM0)
 
-[Link github](https://wikipedia.org)
+[Link github](https://github.com/khanhstj/datxe)
 
 ----
