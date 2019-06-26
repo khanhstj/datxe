@@ -1,7 +1,8 @@
 import React, {Component} from 'react';
 import axios from 'axios';
 import { Redirect } from 'react-router-dom';
-import {  
+import {
+    Row,
   Navbar,
   NavbarToggler,
   NavbarBrand,
@@ -294,24 +295,22 @@ class Menu_TrangChu extends Component {
                             <Modal isOpen={this.state.modal_bacTai} toggle={this.toggle_bacTai}>
                             <ModalHeader toggle={this.toggle_bacTai} >Bác tài đăng nhập</ModalHeader>
                             <ModalBody>
-                            <Form>
-                                <FormGroup row >
-                                
-                                <Col sm={10}>
-                                    <Input type="text" name="txt_bactaisdt" onChange={(e)=>this.handleBacTaiSdtChange(e)} placeholder="Số điện thoại" />
-                                </Col>
-                                </FormGroup>
-                                <FormGroup row>                            
-                                <Col sm={10}>
-                                    <Input type="password" name="txt_bactaimatkhau" onChange={(e)=>this.handleBacTaiMatKhauChange(e)}placeholder="Mật khẩu" />
-                                </Col>
-                                </FormGroup>
-                                </Form>
+                                <form className="box">
+                                    <input type="text" name="txt_bactaisdt" onChange={(e)=>this.handleBacTaiSdtChange(e)} placeholder="Số điện thoại" />
+                                    <input type="password" name="txt_bactaimatkhau" onChange={(e)=>this.handleBacTaiMatKhauChange(e)} placeholder="Mật khẩu" />
+                                </form>
             
                             </ModalBody>
                             <ModalFooter>
-                                <Button color="primary" onClick = {() => this.submitFormBacTaiDangNhap()}>Đăng nhập</Button>
-                                <Button color="secondary" onClick={this.toggle_bacTai}>Hủy</Button>
+                                
+                                <form className="box">
+                                    <Row>
+                                        <Col sm={2}></Col>
+                                        <Col><input type="button" onClick = {() => this.submitFormBacTaiDangNhap()} value="Đăng nhập" /></Col>
+                                        <Col><input type="button" onClick={this.toggle_bacTai} value="Hủy"></input></Col>
+                                        <Col sm={2}></Col>
+                                    </Row>
+                                </form>
                             </ModalFooter>
                             </Modal>
                             <DropdownItem onClick={this.toggle_quanLy}>Quản lý</DropdownItem>

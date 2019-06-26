@@ -21,6 +21,10 @@ class DatXeThanhCong extends Component {
                   <Col sm={3}><Label>Điểm đến</Label></Col>
                   <Col sm={9}><Input type="text" value={this.props.tenDiemDen} readOnly /></Col>
                </FormGroup>
+               <FormGroup row>
+                  <Col sm={3}><Label>Số tiền dự kiến</Label></Col>
+                  <Col sm={9}><Label>Giá tiền ước lượng VNĐ</Label></Col>
+               </FormGroup>
             </Form>
             <h5>Thông tin bác tài</h5>
             <Form>
