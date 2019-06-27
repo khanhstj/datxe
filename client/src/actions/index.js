@@ -1,5 +1,4 @@
 import * as types from './../constants/ActionTypes'
-import axios from 'axios'
 import callApi from './../utils/apiCaller'
 
 export const listAll = () => {

@@ -3,7 +3,6 @@ import {Table} from 'reactstrap';
 import TableRowBacTai from './TableRowBacTai';
 import axios from 'axios';
 import { connect } from 'react-redux'
-import { actLayDanhSachBacTai, actLuuDanhSachBacTai } from './../../../actions/index'
 
 class QuanLyBacTai extends Component {
     constructor(props) {
@@ -14,23 +13,6 @@ class QuanLyBacTai extends Component {
             //bacTai: [ ]
         }
     }
-
-    //componentDidMount() {
-      //  this.props.luuDanhSachBacTai()
-        /*
-        axios.post('http://localhost:8797/danh-sach-bac-tai')
-            .then(res => {
-                this.setState({
-                    bacTai: res.data.users,
-                    isLoaded: true,
-                });
-                
-            })
-            .catch(err => {
-                console.log(err);
-            })
-        */
-    //}
 
     thayDoiTrangThai = (_id, hanhDong) => {
         //this.setState({isLoaded: false});
@@ -90,7 +72,5 @@ const mapStateToProps = state => {
         danhsachbactai : state.danhsachbactai
     }
 }
-
-
 
 export default connect(mapStateToProps)(QuanLyBacTai)

@@ -6,7 +6,7 @@ import QuanLyBacTai from './QuanLyBacTai/QuanLyBacTai';
 import ThongKeTheoNgay from './ThongKeTheoNgay/ThongKeTheoNgay';
 import {Redirect} from 'react-router-dom';
 import { connect } from 'react-redux'
-import { actLayDanhSachBacTai, actLuuDanhSachBacTai } from '../../actions/index'
+import { actLuuDanhSachBacTai } from '../../actions/index'
 
 
 class QuanLy extends Component {

@@ -4,8 +4,6 @@ import './index.css';
 import App from './components/App/App';
 import * as serviceWorker from './serviceWorker';
 import 'bootstrap/dist/css/bootstrap.css';
-
-import { createStore } from 'redux'
 import appReducers from './reducers/index'
 import { Provider } from 'react-redux'
 const store = appReducers
