@@ -1,7 +1,14 @@
-import { combineReducers } from 'redux';
-import tasks from './tasks'
-const myReducer = combineReducers({
-   tasks //tasks: tasks
-});
+import { createStore, combineReducers, compose, applyMiddleware } from 'redux'
+import thunk from 'redux-thunk'
+import danhsachbactai from './danhsachbactai'
 
-export default myReducer;
+const Reducers = combineReducers({
+   danhsachbactai,
+   
+})
+
+const appReducers = createStore(Reducers,
+   compose(applyMiddleware(thunk))
+)
+
+export default appReducers

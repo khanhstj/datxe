@@ -5,6 +5,9 @@ import ChuyenDangCho from './QuanLyThongKeChuyen/ChuyenDangCho';
 import QuanLyBacTai from './QuanLyBacTai/QuanLyBacTai';
 import ThongKeTheoNgay from './ThongKeTheoNgay/ThongKeTheoNgay';
 import {Redirect} from 'react-router-dom';
+import { connect } from 'react-redux'
+import { actLayDanhSachBacTai, actLuuDanhSachBacTai } from '../../actions/index'
+
 
 class QuanLy extends Component {
     constructor(props) {
@@ -16,6 +19,10 @@ class QuanLy extends Component {
             state_thongKeChuyen: true,
         };
         this.DongMoNutThongKe = this.DongMoNutThongKe.bind(this);        
+    }
+
+    componentWillMount() {
+        this.props.luuDanhSachBacTai()
     }
 
     DongMoNutThongKe() {
@@ -87,4 +94,18 @@ class QuanLy extends Component {
     }
 }
 
-export default QuanLy;
+const mapStateToProps = state => {
+    return {
+        danhsachbactai : state.danhsachbactai
+    }
+}
+
+const mapDispatchToProps = (dispatch, props) => {
+    return {
+        luuDanhSachBacTai: () => {
+            dispatch(actLuuDanhSachBacTai())
+        }
+    }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(QuanLy)
