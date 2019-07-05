@@ -58,15 +58,19 @@ app.use('/', routes)
 var bacTaiTrucTuyen = []
 
 io.on('connection', function(socket) {
-    console.log(socket.id + ': connected');
-    console.log('Số lượng bác tài đang ở trạng thái nhận xe: ' + bacTaiTrucTuyen.length)
+    
+    console.log(socket.id + ': connected')
+    
+    //console.log('Số lượng bác tài đang ở trạng thái nhận xe: ' + bacTaiTrucTuyen.length)
     socket.on('disconnect', function() {
         console.log(socket.id + ': disconnected')
-        $index = _findIndex(bacTaiTrucTuyen, ['id', socket.id]);
-        bacTaiTrucTuyen.splice($index, 1);
-        console.log('Số lượng bác tài trực tuyến: ' + bacTaiTrucTuyen.length)
+        //$index = _findIndex(bacTaiTrucTuyen, ['id', socket.id]);
+        //bacTaiTrucTuyen.splice($index, 1);
+        //console.log('Số lượng bác tài trực tuyến: ' + bacTaiTrucTuyen.length)
+        
     })
     socket.on('chayxe', data => {
+        /*
         console.log('chayxe')
         console.log('sdt: ' + data.username)
         console.log('Vị trí: ' + data.viDo + ', ' + data.kinhDo)
@@ -78,6 +82,7 @@ io.on('connection', function(socket) {
             khoangCach: '',
         })
         console.log('Số lượng bác tài đang ở trạng thái nhận xe: ' + bacTaiTrucTuyen.length)
+        */
     })
     
     socket.on('nhanchuyen_boqua', data => {
@@ -92,6 +97,7 @@ io.on('connection', function(socket) {
 
     //Phần của khách đặt xe
     socket.on('datxe', data => {
+        console.log(data)
         //io.to(bacTaiTrucTuyen[0].id).emit('yeucaudatxe', data)
         /*
         let danhSachKhoangCach = []
@@ -133,7 +139,7 @@ io.on('connection', function(socket) {
         
     })
     
-    })
+})
 
 function TimBacTaiGanNhat(mang) {
     let ganNhat = mang[0]
