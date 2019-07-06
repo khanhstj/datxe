@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { Badge } from 'reactstrap';
+import axios from 'axios'
 
 class TableRowBacTai extends Component {
     constructor (props) {
@@ -8,7 +9,7 @@ class TableRowBacTai extends Component {
             trangthai: this.props.trangthai,
         }
     }
-    
+    /*
     thayDoiTrangThai = (_id, hanhDong) => {
         this.props.thayDoiTrangThai(_id, hanhDong);
         if(hanhDong === "kichhoat") {
@@ -18,16 +19,32 @@ class TableRowBacTai extends Component {
             this.setState({trangthai: "Đã khóa"})
         }
     }
+    */
+   thayDoiTrangThai = (_id, hanhDong) => {
+       if(hanhDong==='kichhoat') {
+           this.setState({
+               trangthai: 'Đã kích hoạt'
+           })
+           axios.get(`http://localhost:8797/khoa-kich-hoat?id=${_id}&hanhdong=kichhoat`)
+            
+       }
+       else if(hanhDong === 'khoa'){
+           this.setState({
+               trangthai: 'Đã khóa'
+           })
+           axios.get(`http://localhost:8797/khoa-kich-hoat?id=${_id}&hanhdong=khoa`)
+       }
+   }
 
     ChucNang() {
         if(this.state.trangthai === "Chưa kích hoạt") {
-            return <Badge href="#" color="success" onClick={ () => this.thayDoiTrangThai(this.props._id, "kichhoat") }>Kích hoạt</Badge>
+            return <Badge className="badges" color="success" onClick={ () => this.thayDoiTrangThai(this.props._id, "kichhoat") }>Kích hoạt</Badge>
         }
         else if (this.state.trangthai === "Đã khóa") {
-            return <Badge href="#" color="warning" onClick={ () => this.thayDoiTrangThai(this.props._id, "kichhoat") }>Kích hoạt lại</Badge>
+            return <Badge className="badges" color="warning" onClick={ () => this.thayDoiTrangThai(this.props._id, "kichhoat") }>Kích hoạt lại</Badge>
         }
         else {
-            return <Badge href="#" color="danger" onClick={ () => this.thayDoiTrangThai(this.props._id, "khoa") }>Khóa</Badge>
+            return <Badge className="badges" color="danger" onClick={ () => this.thayDoiTrangThai(this.props._id, "khoa") }>Khóa</Badge>
         }
     }
 

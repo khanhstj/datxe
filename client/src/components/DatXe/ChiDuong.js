@@ -6,9 +6,9 @@ import 'leaflet/dist/leaflet.css'
 import 'leaflet/dist/leaflet.js'
 import L from 'leaflet'
 
-import diemDi from '../../src/diemDi.png'
-import diemDen from '../../src/diemDen.png'
-import { connect } from 'react-redux'
+import diemDi from '../../../src/diemDi.png'
+import diemDen from '../../../src/diemDen.png'
+
 
 var diemDi_icon = L.icon({
    iconUrl: diemDi,
@@ -51,10 +51,5 @@ class ChiDuong extends Component {
    }
 }
 
-const mapStateToProps = state => {
-   return {
-      toogle_ChiDuong: state.toogle_ChiDuong
-   }
-}
 
-export default connect(mapStateToProps)(ChiDuong)
+export default ChiDuong

@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import MenuTrangChu from './MenuTrangChu/MenuTrangChu';
-
+import NoiDungTrangChu from './NoiDungTrangChu/NoiDungTrangChu'
 
 class TrangChu extends Component {
 
@@ -8,6 +8,8 @@ class TrangChu extends Component {
         return (
             <div>
                 <MenuTrangChu/>
+                <NoiDungTrangChu/>
+                
             </div>
         );
     }

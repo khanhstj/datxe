@@ -1,12 +1,13 @@
 import React, { Component } from 'react'
+import { connect } from 'react-redux'
 import MenuDatXe from './MenuDatXe/MenuDatXe'
 import FormDatXe from './FormDatXe/FormDatXe'
 import DatXeThanhCong from './FormDatXe/DatXeThanhCong'
 import MapsDatXe from './MapsDatXe/MapsDatXe'
-import {Container, Row, Col} from 'reactstrap'
+import ChiDuong from './ChiDuong'
+import {Container, Row, Col, Spinner } from 'reactstrap'
 import io from 'socket.io-client';
 import axios from 'axios'
-
 
 class DatXe extends Component {
    constructor(props) {
@@ -19,7 +20,6 @@ class DatXe extends Component {
          viDoDen: null,
          kinhDoDen: null,
          coToaDo: false,
-         err: null,
          sdtDatXe: '',
          tenDiemDi: '',
          tenDiemDen: '',
@@ -27,15 +27,10 @@ class DatXe extends Component {
          noiDonKhach_kinhDo: null,
          noiTraKhach_viDo: null,
          noiTraKhach_kinhDo: null,
+         muonDatXe: false,
          daDatXe: false,
-         messages: [
-            {
-               id: 1, userId: 0, message: 'Hello'
-            }
-         ],
-         user: null,
+         hienChiDuong: false,
       }
-      this.socket = null
    }
 
    componentDidMount() {
@@ -103,34 +98,60 @@ class DatXe extends Component {
       })
    }
 
+   hienChiDuong = (hanhDong) => {
+      if(hanhDong === true) {
+         this.setState({
+            hienChiDuong: true
+         })
+      }
+      else if (hanhDong===false) {
+         this.setState({
+            hienChiDuong: false
+         })
+      }
+   }
+//(this.state.hienChiDuong===true)
    render() {
       if(this.state.coToaDo === true) {
          return (
             <div>
-               <MenuDatXe />
+               {
+                  localStorage.getItem('viTriDiemDen')!==null ?
+                  <MenuDatXe moChiDuong={true} /> :
+                  <MenuDatXe moChiDuong={false} />
+               }
+               {this.props.moChiDuong === true
+               ? <ChiDuong />
+               :
                <Container>
                   <Row>
-                  <Col xs="6"><MapsDatXe vido={this.state.vido} kinhdo={this.state.kinhdo} coToaDo={true} viDoDi={this.state.viDoDi} kinhDoDi={this.state.kinhDoDi} viDoDen={this.state.viDoDen} kinhDoDen={this.state.kinhDoDen} /></Col>
+                  <Col xs="6"><MapsDatXe vido={this.state.vido} kinhdo={this.state.kinhdo} coToaDo={true} /></Col>
                   <Col xs="6">
-                     {this.state.daDatXe !== true
+                     {
+                     localStorage.getItem('viTriDiemDen') === null
                      ? <FormDatXe guiYeuCauDatXe={this.DatXe} vido={this.state.vido} kinhdo={this.state.kinhdo} coToaDo={true} daDatXe={this.state.daDatXe} />
                      : <DatXeThanhCong sdtDatXe={this.state.sdtDatXe} tenDiemDi={this.state.tenDiemDi} tenDiemDen={this.state.tenDiemDen} />
                      }
                   </Col>
                   </Row>
-               </Container>  
+               </Container> 
+               }
+                
             </div>
+         )
+         
+                  
 
-         );
+         
       }
       else {
          return (
             <div>
-               <MenuDatXe />
+               <MenuDatXe  />
                <Container> 
                   <Row>
-                     <Col xs="4"></Col>
-                     <Col><h4>Đang lấy vị trí</h4></Col>
+                     <Col xs="3"></Col>
+                     <Col xs="8"> <Spinner color="warning" /> <h4>Đang lấy vị trí</h4></Col>
                   </Row>                
                   <Row>
                      <Col xs="6"><MapsDatXe vido={10.832767} kinhdo={106.612752} coToaDo={false} viDoDi={this.state.viDoDi} kinhDoDi={this.state.kinhDoDi} viDoDen={this.state.viDoDen} kinhDoDen={this.state.kinhDoDen} /></Col>
@@ -149,4 +170,10 @@ class DatXe extends Component {
    }
 }
 
-export default DatXe;
+const mapStateToProps = state => {
+   return {
+      moChiDuong: state.datxe
+   }
+}
+
+export default connect(mapStateToProps, null) (DatXe)

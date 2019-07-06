@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import {Table} from 'reactstrap';
 import TableRowBacTai from './TableRowBacTai';
-import axios from 'axios';
 import { connect } from 'react-redux'
 
 class QuanLyBacTai extends Component {
@@ -13,40 +12,25 @@ class QuanLyBacTai extends Component {
             //bacTai: [ ]
         }
     }
-
-    thayDoiTrangThai = (_id, hanhDong) => {
-        //this.setState({isLoaded: false});
-        axios.get(`http://localhost:8797/khoa-kich-hoat?id=${_id}&hanhdong=${hanhDong}`)
-            .then(res => {
-                //this.setState({
-                    //bacTai: res.data.users,
-                    //isUpdated: true
-                //});
-                
-            })
-            .catch(err => {
-                console.log(err);
-            })
-    }
-
+    
     render() {
         var  { danhsachbactai } = this.props
         if(danhsachbactai.users.length>0) {
             return (
                 <Table hover responsive >
                     <thead>
-                        <tr><th colSpan="5"><h4>Danh sách bác tài</h4></th></tr>
+                        <tr align="center"><th colSpan="6"><h4>Danh sách bác tài</h4></th></tr>
                         <tr>
-                            <th xs="1">STT</th>
-                            <th xs="2">Số điện thoại</th>
-                            <th xs="3">Họ và tên</th>
-                            <th xs="2">Số xe</th>
-                            <th xs="2">Trạng thái</th>
-                            <th xs="2">Chức năng</th>
+                            <th width="5%">STT</th>
+                            <th width="15%" align="center">Số điện thoại</th>
+                            <th width="25%">Họ và tên</th>
+                            <th width="20%" align="center">Số xe</th>
+                            <th width="20%">Trạng thái</th>
+                            <th width="15%">Chức năng</th>
                         </tr>
                     </thead>
                     <tbody>
-                        {this.show_product(danhsachbactai)}
+                        {this.doDanhSach(danhsachbactai)}
                     </tbody>
                 </Table>
             )
@@ -56,7 +40,7 @@ class QuanLyBacTai extends Component {
         }
     }
 
-    show_product = (danhsachbactai) => {
+    doDanhSach = (danhsachbactai) => {
         if(danhsachbactai.users.length > 0) {
             const result = danhsachbactai.users.map((bactai, index) => 
                 <TableRowBacTai key={index} stt={index} _id={bactai._id} thayDoiTrangThai={this.thayDoiTrangThai} hoten={bactai.hoten} soxe={bactai.soxe} trangthai={bactai.trangthai}>{bactai.username}</TableRowBacTai>

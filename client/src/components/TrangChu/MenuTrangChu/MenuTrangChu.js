@@ -14,6 +14,7 @@ import {
   DropdownItem,
   ButtonDropdown,
   Col, Form, FormGroup, Label, Input, FormText, Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
+import validator from 'validator'
 
 class Menu_TrangChu extends Component {
     constructor(props) {
@@ -98,9 +99,11 @@ class Menu_TrangChu extends Component {
             loaded: 0,
         })
     }
-
         
     submitForm = () => {
+        if(validator.isMobilePhone(this.state.txt_sdtBacTai, 'vi-VN') === false) {
+            alert('Số điện thoại không hợp lệ, vui lòng kiểm tra lại')
+        }
         var data = new FormData();
         data.append('fileChanDung', this.state.fileChanDung);
         data.append('fileXe', this.state.fileXe);
@@ -116,15 +119,17 @@ class Menu_TrangChu extends Component {
                 }
             })
             .then(response => {
+                if(response.data.signup === 'thành công') {
+                    alert('Đã đăng ký tài khoản thành công')
+                }
                 this.toggle_dangKy();
-                //alert('Đăng ký thành công!!!');
+                
             })
             .catch(error => {
-                alert(error.response);
+                console.log(error.response);
             });
         
     }
-    //
 
     //Phần dành cho bác tài đăng nhập
     handleBacTaiSdtChange = (event) => {

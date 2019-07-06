@@ -5,6 +5,7 @@ import TrangChu from '../TrangChu/TrangChu'
 import BacTai from '../BacTai/BacTai'
 import DatXe from '../DatXe/DatXe'
 import QuanLy from '../QuanLy/QuanLy'
+import Loading from '../Loading'
 
 class RouterURL extends Component {
    render() {
@@ -16,6 +17,7 @@ class RouterURL extends Component {
                <Route path="/bac-tai" component={BacTai} />
                <Route path="/dat-xe" component={DatXe} />
                <Route path="/test" component={TestRouting} />
+               <Route path="/loading" component={Loading} />
             </Router>
          </div>
       );
