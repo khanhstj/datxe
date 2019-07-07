@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import { Button, Form, FormGroup, Label, Input, Col, } from 'reactstrap'
+import io from 'socket.io-client'
 import 'leaflet'
 import 'leaflet-routing-machine'
 import 'leaflet/dist/leaflet.css'
@@ -21,7 +22,6 @@ class DatXeThanhCong extends Component {
          
       }
    }
-   
 
    render() {
       return (
@@ -56,7 +56,7 @@ class DatXeThanhCong extends Component {
 
                   <FormGroup row>
                      <Col sm={3}><Label>Số điện thoại</Label></Col>
-                     <Col sm={9}><Input type="text"  readOnly /></Col>
+                     <Col sm={9}><Input type="text" value={this.props.sdtBacTai} readOnly /></Col>
                   </FormGroup>
 
                   <FormGroup row>

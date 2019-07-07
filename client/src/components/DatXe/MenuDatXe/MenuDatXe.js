@@ -27,13 +27,13 @@ class MenuDatXe extends Component {
          chiDuong: !prevState.chiDuong
       }))
       */
-     console.log(this.props.stj)
+
      this.props.counterIncrease()
    }
 
    render() {
-      //var {stj} = this.props
-      //console.log(stj)
+      //var {chiDuong} = this.props
+      //console.log(chiDuong)
       if(this.state.dangXuat === true) {
          return <Redirect to="/" />
       }
@@ -55,7 +55,7 @@ class MenuDatXe extends Component {
                   </Nav>
                   {this.props.moChiDuong === true
                   ?
-                  <Button className="ml-auto" color="warning" onClick={() => this.hienChiDuong()}>{this.props.stj===false?'Mở chỉ đường':'Đóng chỉ đường'}</Button>
+                  <Button className="ml-auto" color="warning" onClick={() => this.hienChiDuong()}>{this.props.chiDuong===false?'Mở chỉ đường':'Đóng chỉ đường'}</Button>
                   : null}
                </Navbar>
                
@@ -68,7 +68,7 @@ class MenuDatXe extends Component {
 
 const mapStateToProps = state => {
    return {
-      stj: state.datxe
+      chiDuong: state.datxe
    }
 }
 

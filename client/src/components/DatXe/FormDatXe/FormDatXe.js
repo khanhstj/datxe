@@ -46,38 +46,31 @@ class FormDatXe extends Component {
          })
       }
    }
-
-   validatePhoneNumber = (number) => {
-      const isValidPhoneNumber = validator.isMobilePhone(number, 'vi-VN')
-      return (isValidPhoneNumber)
-   }
-   DatXe = () => {
-      console.log(this.validatePhoneNumber(this.state.txt_sdt))
-   }
    
+   capNhat = () => {
+      this.props.capNhat_DatXeThanhCong()
+   }
+
    DatXe = () => {
       if(validator.isMobilePhone(this.state.txt_sdt, 'vi-VN')===true) {
          
          if(this.state.btn_layViTri === false && this.state.txt_sdt !== '' && this.state.txt_diemDi !== '' && this.state.txt_diemDen !== '') {
             this.setState({loading: true})
             localStorage.setItem('sdtKhachHang', this.state.txt_sdt)
+
             axios.get(`https://nominatim.openstreetmap.org/search?format=json&q=${this.state.txt_diemDi}`).then(response=> {
-               this.setState({
-                  viTriDiemDi: response.data[0].display_name
-               })
                localStorage.setItem('viDoDiemDi', response.data[0].lat)
                localStorage.setItem('kinhDoDiemDi', response.data[0].lon)
                localStorage.setItem('viTriDiemDi', response.data[0].display_name)
+
                axios.get(`https://nominatim.openstreetmap.org/search?format=json&q=${this.state.txt_diemDen}`).then(res=> {
                   this.setState({
                      viTriDiemDen: res.data[0].display_name
                   })
-                  this.props.guiYeuCauDatXe(this.state.txt_sdt, this.state.btn_layViTri, this.state.txt_diemDen, this.state.viTriDiemDi)
                   localStorage.setItem('viDoDiemDen', res.data[0].lat)
                   localStorage.setItem('kinhDoDiemDen', res.data[0].lon)
-                  localStorage.setItem('chiDuong', false)
                   localStorage.setItem('viTriDiemDen', res.data[0].display_name)
-                     
+                  this.capNhat()
                })
             })
          }
@@ -86,7 +79,6 @@ class FormDatXe extends Component {
             //this.props.guiYeuCauDatXe(this.state.txt_sdt, this.state.txt_diemDi, this.state.txt_diemDen, this.state.viTriDiemDi)
             localStorage.setItem('sdtKhachHang', this.state.txt_sdt)
             axios.get(`https://nominatim.openstreetmap.org/search?format=json&q=${this.state.txt_diemDen}`).then(res =>{
-               localStorage.setItem('chiDuong', false)
                localStorage.setItem('viTriDiemDen', res.data[0].display_name)
             })
             

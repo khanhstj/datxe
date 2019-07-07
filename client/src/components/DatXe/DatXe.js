@@ -30,9 +30,25 @@ class DatXe extends Component {
          muonDatXe: false,
          daDatXe: false,
          hienChiDuong: false,
+         hoTenBactai: '',
+         sdtBacTai: '',
+         soXe: '',
+         capNhatLai: localStorage.getItem('viTriDiemDen')
       }
+      this.socket = null
    }
-
+   componentWillMount() {
+      console.log('Will mount component DatXeThanhCong')
+      if(localStorage.getItem('viTriDiemDen') !== null) {
+         this.socket = io('http://localhost:8797')
+         this.socket.on('phanhoi', res => this.setState({
+            hoTenBactai: res.hoTenBactai,
+            sdtBacTai: res.sdtBacTai,
+            soXe: res.soXe,
+         }))
+      }
+      
+   }
    componentDidMount() {
       this.geoId = navigator.geolocation.watchPosition(
          (position) => {
@@ -46,126 +62,82 @@ class DatXe extends Component {
          (error) => {
            console.log(error)
          }
-       )
+      )
+      console.log('Did Mount component DatXe')
+      if(localStorage.getItem('viTriDiemDen') !== null) {
+         this.socket.emit('datxe', 'abc')
+      }
+   }
+
+   shouldComponentUpdate(nextProps, nextState) {
+      
+      if(this.state.capNhatLai === nextState.capNhatLai) {
+         return false
+      }
+      else {
+         return true
+      }
+      
+     
    }
 
    componentWillUnmount() {
       navigator.geolocation.clearWatch(this.geoId)
    }
 
-   DatXe = (sdt, diemDi, diemDen, tenDiemDi) => {
-      axios.get('https://nominatim.openstreetmap.org/search?format=json&q='+diemDen)
-      .then(response => {
-         
-         this.setState({
-            sdtDatXe: sdt,
-            tenDiemDen: diemDen,
-            noiTraKhach_viDo: response.data[0].lat,
-            noiTraKhach_kinhDo: response.data[0].lon,
-         })
-         if(diemDi !== true) {
-            axios.get('https://nominatim.openstreetmap.org/search?format=json&q='+diemDi)
-            .then(res => {
-               this.setState({
-                  tenDiemDi: diemDi,
-                  noiDonKhach_viDo: res.data[0].lat,
-                  noiDonKhach_kinhDo: res.data[0].lon,
-               })
-               this.socket = io('http://localhost:8797/')
-               this.socket.emit('datxe', {
-                  sdtKhachHang: sdt,
-                  
-                  noiDonKhach_viDo: this.state.noiDonKhach_viDo,
-                  noiDonKhach_kinhDo: this.state.noiDonKhach_kinhDo,
-                  noiTraKhach_viDo: this.state.noiTraKhach_viDo,
-                  noiTraKhach_kinhDo: this.state.noiTraKhach_kinhDo,
-               })
-            })
-         }
-         else {
-            this.setState({tenDiemDi: tenDiemDi})
-            this.socket = io('http://localhost:8797/')
-               this.socket.emit('datxe', {
-                  sdtKhachHang: sdt,
-                  noiDonKhach_viDo: this.state.vido,
-                  noiDonKhach_kinhDo: this.state.kinhdo,
-                  noiTraKhach_viDo: this.state.noiTraKhach_viDo,
-                  noiTraKhach_kinhDo: this.state.noiTraKhach_kinhDo,
-               })
-
-         }
-         this.setState({daDatXe: true})
+   capNhat_DatXeThanhCong = () => {
+      this.setState({
+         capNhatLai: true
       })
+      console.log('Cập nhật lại')
+      
    }
 
-   hienChiDuong = (hanhDong) => {
-      if(hanhDong === true) {
-         this.setState({
-            hienChiDuong: true
-         })
-      }
-      else if (hanhDong===false) {
-         this.setState({
-            hienChiDuong: false
-         })
-      }
-   }
-//(this.state.hienChiDuong===true)
    render() {
       if(this.state.coToaDo === true) {
          return (
             <div>
                {
-                  localStorage.getItem('viTriDiemDen')!==null ?
-                  <MenuDatXe moChiDuong={true} /> :
-                  <MenuDatXe moChiDuong={false} />
+                  localStorage.getItem('viTriDiemDen') !== null && this.props.moChiDuong === true
+                  ?
+                  <div>
+                     <MenuDatXe moChiDuong={true} />
+                     <ChiDuong />
+                  </div>
+                  :
+                  localStorage.getItem('viTriDiemDen') !== null && this.props.moChiDuong === false
+                  ?
+                  <div>
+                     <MenuDatXe moChiDuong={false} />
+                     <Container>
+                        <Row>
+                           <Col xs="6"><MapsDatXe vido={this.state.vido} kinhdo={this.state.kinhdo} coToaDo={true} /></Col>
+                           <Col xs="6">
+                              <DatXeThanhCong sdtBacTai={this.state.sdtBacTai} />
+                           </Col>
+                        </Row>
+                     </Container>
+                  </div>
+                  :
+                  <div>
+                     <MenuDatXe moChiDuong={false} />
+                     <Container>
+                        <Row>
+                           <Col xs="6"><MapsDatXe vido={this.state.vido} kinhdo={this.state.kinhdo} coToaDo={true} /></Col>
+                           <Col xs="6">
+                              <FormDatXe vido={this.state.vido} kinhdo={this.state.kinhdo} coToaDo={true} capNhat_DatXeThanhCong={() => this.capNhat_DatXeThanhCong()} />
+                           </Col>
+                        </Row>
+                     </Container>
+                  </div>
                }
-               {this.props.moChiDuong === true
-               ? <ChiDuong />
-               :
-               <Container>
-                  <Row>
-                  <Col xs="6"><MapsDatXe vido={this.state.vido} kinhdo={this.state.kinhdo} coToaDo={true} /></Col>
-                  <Col xs="6">
-                     {
-                     localStorage.getItem('viTriDiemDen') === null
-                     ? <FormDatXe guiYeuCauDatXe={this.DatXe} vido={this.state.vido} kinhdo={this.state.kinhdo} coToaDo={true} daDatXe={this.state.daDatXe} />
-                     : <DatXeThanhCong sdtDatXe={this.state.sdtDatXe} tenDiemDi={this.state.tenDiemDi} tenDiemDen={this.state.tenDiemDen} />
-                     }
-                  </Col>
-                  </Row>
-               </Container> 
-               }
-                
-            </div>
+               </div>
          )
-         
-                  
-
-         
       }
       else {
          return (
-            <div>
-               <MenuDatXe  />
-               <Container> 
-                  <Row>
-                     <Col xs="3"></Col>
-                     <Col xs="8"> <Spinner color="warning" /> <h4>Đang lấy vị trí</h4></Col>
-                  </Row>                
-                  <Row>
-                     <Col xs="6"><MapsDatXe vido={10.832767} kinhdo={106.612752} coToaDo={false} viDoDi={this.state.viDoDi} kinhDoDi={this.state.kinhDoDi} viDoDen={this.state.viDoDen} kinhDoDen={this.state.kinhDoDen} /></Col>
-                     <Col xs="6">
-                        {this.state.daDatXe !== true
-                        ? <FormDatXe guiYeuCauDatXe={this.DatXe} daDatXe={this.state.daDatXe} />
-                        : <DatXeThanhCong />
-                        }
-                        </Col>
-                  </Row>
-               </Container>
-            </div>
-
-         );
+            <div>Chưa nhận được tọa độ, sẽ load Maps lớn</div>
+         )
       }
    }
 }
