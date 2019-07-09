@@ -13,7 +13,7 @@ const http = require('http')
 const axios = require('axios')
 var _findIndex = require('lodash/findIndex')
 var MongoStore = require('connect-mongo')(session);
-
+const geolib = require('geolib')
 
 const app = express()
 const server = http.createServer(app)
@@ -69,20 +69,22 @@ io.on('connection', function(socket) {
         //console.log('Số lượng bác tài trực tuyến: ' + bacTaiTrucTuyen.length)
         
     })
-    socket.on('chayxe', data => {
-        /*
+    socket.on('tructuyen', data => {
         console.log('chayxe')
-        console.log('sdt: ' + data.username)
-        console.log('Vị trí: ' + data.viDo + ', ' + data.kinhDo)
+        console.log(data)
         bacTaiTrucTuyen.push({
             id: socket.id,
             username: data.username,
+            sdt: data.sdt,
             viDo: data.viDo,
             kinhDo: data.kinhDo,
-            khoangCach: '',
         })
         console.log('Số lượng bác tài đang ở trạng thái nhận xe: ' + bacTaiTrucTuyen.length)
-        */
+        console.log('Danh sách bác tài')
+        bacTaiTrucTuyen.forEach((item, index, array) => {
+            console.log(item, index)
+        })
+        
     })
     
     socket.on('nhanchuyen_boqua', data => {
@@ -97,7 +99,42 @@ io.on('connection', function(socket) {
 
     //Phần của khách đặt xe
     socket.on('datxe', data => {
+        let danhSachBacTai = []
         console.log(data)
+        
+        bacTaiTrucTuyen.forEach(function(item, index, array) {
+            let khoangCachBacTaiVaKH = geolib.getDistance(    
+                { latitude: data.viDoDi, longitude: data.kinhDoDi },
+                { latitude: item.viDo, longitude: item.kinhDo }
+            )
+            danhSachBacTai.push({
+                id: socket.id,
+                username: item.username,
+                viDo: item.viDo,
+                kinhDo: item.kinhDo,
+                khoangCach: khoangCachBacTaiVaKH,
+            })
+        })
+        var bacTaiGanNhat = TimBacTaiGanNhat(danhSachBacTai)
+
+        io.to(bacTaiGanNhat.id).emit('phanhoi', {
+            sdtBacTai: '0337301998',
+        })
+
+        /*
+        var khoangCach = geolib.getDistance(    
+            { latitude: data.viDoDi, longitude: data.kinhDoDi },
+            { latitude: data.viDoDen, longitude: data.kinhDoDen }
+        )
+        console.log('Khoảng cách: ' + khoangCach)
+        */
+        
+        /*
+        socket.emit('phanhoi', {
+            hoTenBacTai: 'Trần Duy Khánh',
+            sdtBacTai: '0337301998',
+            soXe: '59N2 62823',
+        })*/
         //io.to(bacTaiTrucTuyen[0].id).emit('yeucaudatxe', data)
         /*
         let danhSachKhoangCach = []
@@ -141,8 +178,8 @@ io.on('connection', function(socket) {
     
 })
 
-function TimBacTaiGanNhat(mang) {
-    let ganNhat = mang[0]
+TimBacTaiGanNhat = (mang) => {
+    let ganNhat = mang[0].khoangCach
     for(let i = 0; i<mang.length; i++) {
         if(mang[i].khoangCach<ganNhat) {
             ganNhat = mang[i]
@@ -150,6 +187,7 @@ function TimBacTaiGanNhat(mang) {
     }
     return ganNhat //trả về bác tài gần nhất
 }
+
 
 server.listen(PORT, () => {console.log("Server started on http://localhost:"+PORT)})
 
