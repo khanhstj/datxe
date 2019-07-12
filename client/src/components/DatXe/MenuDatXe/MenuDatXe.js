@@ -22,13 +22,7 @@ class MenuDatXe extends Component {
    }
 
    hienChiDuong = () => {
-      /*this.props.hienChiDuong(this.state.chiDuong)
-      this.setState(prevState => ({
-         chiDuong: !prevState.chiDuong
-      }))
-      */
-
-     this.props.counterIncrease()
+     this.props.dongMoChiDuong_DatXe()
    }
 
    render() {

@@ -1,11 +1,16 @@
-import React, { Component } from 'react';
+import React, { Component } from 'react'
+import {Container, Row, Col, Spinner } from 'reactstrap'
+import {Redirect} from 'react-router-dom'
+
 import MenuBacTai from './MenuBacTai/MenuBacTai'
 import MapsBacTai from './MapsBacTai/MapsBacTai'
-import {Container, Row, Col} from 'reactstrap'
-import {Redirect} from 'react-router-dom'
 import FormBacTai from './FormBacTai/FormBacTai'
-import io from 'socket.io-client';
+import ChayXe from './FormBacTai/ChayXe'
 import BacTaiBiKhoa from './FormBacTai/BacTaiBiKhoa'
+
+import io from 'socket.io-client'
+import { connect } from 'react-redux'
+import axios from 'axios';
 
 class BacTai extends Component {
 
@@ -15,66 +20,74 @@ class BacTai extends Component {
          vido: null,
          kinhdo: null,
          coToaDo: false,
-         err: null,
          chayXe: false,
-         sdtKhachHang: '',
-         hoTenKhachHang: '',
-         diaDiemDonKhach: '',
-         diemDen: '',
+         id_KH: '',
+         sdt_KH: '',
+         viDoDi_KH: '',
+         kinhDoDi_KH: '',
+         viTriDiemDi_KH: '',
+         viDoDen_KH: '',
+         kinhDoDen_KH: '',
+         viTriDiemDen_KH: '',
+         
       }
       this.socket = null
    }
    componentWillMount() {
-      if(this.state.nhanxe === true) {
-         this.socket.on('yeucaudatxe', data => {
-            alert('Có yêu cầu đặt xe')
-            this.setState({
-               sdtKhachHang: data.sdtKhachHang,
-               //hoTenKhachHang: data.hoTenKhachHang,
-               diaDiemDonKhach: data.diaDiemDonKhach,
-               diemDen: data.diemDen,
-               noiDonKhach_viDo: data.noiDonKhach_viDo,
-               noiDonKhach_kinhDo: data.noiDonKhach_kinhDo,
-               noiTraKhach_viDo: data.noiTraKhach_viDo,
-               noiTraKhach_kinhDo: data.noiTraKhach_kinhDo,
-            })
-
-         })
-      }
+      console.log('Component Will Mount BacTai')
+      this.socket = io('http://localhost:8797')
+      this.socket.on('yeucauxe', res => this.yeuCauXe(res))
    }
+
+   yeuCauXe (res) {
+      alert('Có 1 yêu cầu đặt xe')
+      this.setState({
+         id_KH: res.id_KH,
+         sdt_KH: res.sdt_KH,
+         viDoDi_KH: res.viDoDi_KH,
+         kinhDoDi_KH: res.kinhDoDi_KH,
+         viTriDiemDi_KH: res.viTriDiemDi_KH,
+         viDoDen_KH: res.viDoDen_KH,
+         kinhDoDen_KH: res.kinhDoDen_KH,
+         viTriDiemDen_KH: res.viTriDiemDen_KH,
+      })
+   }
+
    componentDidMount() {
+      console.log('Component Did Mount BacTai')
       this.geoId = navigator.geolocation.watchPosition(
          (position) => {
-            this.forceUpdate()
             this.setState({               
                vido: position.coords.latitude,
                kinhdo: position.coords.longitude,
                coToaDo: true
             })
+            this.forceUpdate()
          },
          (error) => {
            console.log(error)
          }
-       )
+      )
+      
    }
 
    componentWillUnmount() {
       navigator.geolocation.clearWatch(this.geoId)
+      this.socket.close()
    }
 
    ChayXe_TamDung = (hanhDong) => {
       if(hanhDong === 'chayxe') {
          if(this.state.coToaDo === true) {
-            this.socket = io('http://localhost:8797/')
+            this.socket.emit('chayxe', {
+               sdt_BT: JSON.parse(localStorage.getItem('bactai')).username,
+               viDo_BT: this.state.vido,
+               kinhDo_BT: this.state.kinhdo,
+               hoTen_BT: JSON.parse(localStorage.getItem('bactai')).hoten,
+               soXe_BT: JSON.parse(localStorage.getItem('bactai')).soxe,
+            })
             this.setState({
                chayXe: true
-            })
-            this.socket.emit('chayxe', {
-               username: JSON.parse(localStorage.getItem('bactai')).username,
-               viDo: this.state.vido,
-               kinhDo: this.state.kinhdo,
-               hoten: JSON.parse(localStorage.getItem('bactai')).hoten,
-               soxe: JSON.parse(localStorage.getItem('bactai')).soxe,
             })
            
          }
@@ -92,10 +105,36 @@ class BacTai extends Component {
          })
       }
    }
-
+   
    NhanChuyen_BoQua = (luaChon) => {
       this.socket.emit('nhanchuyen_boqua', {
-         luaChon: luaChon
+         id_KH: this.state.id_KH,
+         luaChon: luaChon,
+         sdt_BT: JSON.parse(localStorage.getItem('bactai')).username,
+         hoTen_BT: JSON.parse(localStorage.getItem('bactai')).hoten,
+         soXe_BT: JSON.parse(localStorage.getItem('bactai')).soxe,
+      })
+      console.log('Đã nhận chuyến')
+   }
+
+   DenNoi = () => {
+      axios.post('http://localhost:8797/hoan-tat-chuyen', {
+         bacTai: JSON.parse(localStorage.getItem('bactai')).username,
+         sdt_KH: this.state.sdt_KH,
+         viDoDi_KH: this.state.viDoDi_KH,
+         kinhDoDi_KH: this.state.kinhDoDi_KH,
+         viTriDiemDi_KH: this.state.viTriDiemDi_KH,
+         viDoDen_KH: this.state.viDoDen_KH,
+         kinhDoDen_KH: this.state.kinhDoDen_KH,
+         viTriDiemDen_KH: this.state.viTriDiemDen_KH,
+      })
+      
+      this.setState({
+         chayXe: false
+      })
+      
+      this.socket.emit('tamdung', {
+         username: JSON.parse(localStorage.getItem('bactai')).username
       })
    }
 
@@ -109,22 +148,33 @@ class BacTai extends Component {
          return (
             <div>
                <MenuBacTai ChayXe_TamDung={this.ChayXe_TamDung} chayXe={this.state.chayXe} />
-                  
-               <Container>
-                  {this.state.coToaDo?''
-                  :<Row>
-                     <Col xs="4"></Col>
-                     <Col><h4>Đang lấy vị trí</h4></Col>
-                  </Row> }              
+               {
+                  this.state.coToaDo === true
+               ?
+                  ''
+               :
+               <div className="centerItems"><Spinner color="warning"/>  <h4>Đang xác định vị trí của bạn</h4></div>
+               }
+               <Container>     
                   <Row>
-                     <Col xs="6">{this.state.coToaDo
-                        ?<MapsBacTai vido={this.state.vido} kinhdo={this.state.kinhdo} />
-                        :<MapsBacTai vido={10.832767} kinhdo={106.612752} coToaDo={false} />}
+                     <Col xs="6">
+                     {
+                        this.state.coToaDo === true
+                        ?
+                        <MapsBacTai vido={this.state.vido} kinhdo={this.state.kinhdo} coToaDo={true} />
+                        :
+                        <MapsBacTai coToaDo={false} />
+                     }
                      </Col>
                      <Col xs="6">
-                        {(JSON.parse(localStorage.getItem('bactai')).trangthai === 'Đã kích hoạt')
-                        ? <FormBacTai sdtKhachHang={this.state.sdtKhachHang} hoTenKhachHang={this.state.hoTenKhachHang} diaDiemDonKhach={this.state.diaDiemDonKhach} diemDen={this.state.diemDen} NhanChuyen_BoQua={this.NhanChuyen_BoQua} chayxe={this.state.chayXe}/>
-                        : <BacTaiBiKhoa />
+                        {(JSON.parse(localStorage.getItem('bactai')).trangthai === 'Đã kích hoạt') && this.state.chayXe === false
+                        ? 
+                        <FormBacTai />
+                        : (JSON.parse(localStorage.getItem('bactai')).trangthai === 'Đã kích hoạt') && this.state.chayXe===true
+                        ?
+                        <ChayXe sdt_KH={this.state.sdt_KH} viTriDiemDi_KH={this.state.viTriDiemDi_KH} viTriDiemDen_KH={this.state.viTriDiemDen_KH} NhanChuyen_BoQua={this.NhanChuyen_BoQua} DenNoi={this.DenNoi} />
+                        :
+                        <BacTaiBiKhoa />
                         }
                      </Col>
                   </Row>
@@ -135,4 +185,19 @@ class BacTai extends Component {
       }     
   }
 }
-export default BacTai;
+
+const mapStateToProps = (state) => {
+   if(JSON.parse(localStorage.getItem('bactai')).trangthai === 'Đã kích hoạt') {
+      return {
+         moChiDuong: state.bactai,
+         chayXe: state.datxe,
+      }
+   }
+   else {
+      return {
+         moChiDuong: state.bactai
+      }
+   }
+}
+
+export default connect (mapStateToProps, null) (BacTai)

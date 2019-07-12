@@ -1,4 +1,5 @@
 export const LIST_ALL = 'LIST_ALL'
 export const DANHSACHBACTAI = 'DANHSACHBACTAI'
-export const TOOGLE_CHIDUONG_DATXE = 'TOOGLE_CHIDUONG_DATXE'
-export const INCREASE = 'increase'
+export const DONGMO_CHIDUONG_DATXE = 'dongmo_chiduong_datxe'
+export const DONGMO_CHIDUONG_BACTAI = 'dongmo_chiduong_bactai'
+export const CHAYXE_TAMDUNG_BACTAI = 'chayxe_tamdung_bactai'

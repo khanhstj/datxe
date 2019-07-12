@@ -16,8 +16,8 @@ export const actLayDanhSachBacTai = (danhsachbactai) => {
    }
 }
 
-export const toogleChiDuong_DatXe = {
-   type: types.TOOGLE_CHIDUONG_DATXE   
-}
+export const dongMoChiDuong_DatXe = () => ({type: types.DONGMO_CHIDUONG_DATXE})
 
-export const counterIncrease = () => ({type: types.INCREASE})
+export const dongMoChiDuong_BacTai = () => ({type: types.DONGMO_CHIDUONG_BACTAI})
+
+export const chayXe_TamDung_BacTai = () => ({type: types.CHAYXE_TAMDUNG_BACTAI})

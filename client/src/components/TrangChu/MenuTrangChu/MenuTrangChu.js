@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import axios from 'axios';
-import { Redirect } from 'react-router-dom';
+import { Redirect } from 'react-router-dom'
 import {
     Row,
   Navbar,
@@ -100,7 +100,7 @@ class Menu_TrangChu extends Component {
         })
     }
         
-    submitForm = () => {
+    dangKyChayXe = () => {
         if(validator.isMobilePhone(this.state.txt_sdtBacTai, 'vi-VN') === false) {
             alert('Số điện thoại không hợp lệ, vui lòng kiểm tra lại')
         }
@@ -147,8 +147,9 @@ class Menu_TrangChu extends Component {
         })
         .then(res => {
             if(res.data.login === "thành công") {
-                localStorage.setItem('bactai', JSON.stringify(res.data.user));
-                this.setState({daDangNhap_bactai: true});
+                alert('Đăng nhập thành công')
+                localStorage.setItem('bactai', JSON.stringify(res.data.user))
+                this.setState({daDangNhap_bactai: true})
             }
             else if (res.data.login === "chưa đăng ký") {
                 alert('Số điện thoại này chưa được đăng ký, nếu muốn trở thành bác tài, hãy đăng ký tài khoản')
@@ -162,7 +163,7 @@ class Menu_TrangChu extends Component {
         
         })
         .catch(error => {
-            alert(error.response);
+            console.log(error);
         })
     }   
     //
@@ -282,7 +283,7 @@ class Menu_TrangChu extends Component {
                                     </Form>
                                 </ModalBody>
                                 <ModalFooter>
-                                    <Button color="primary" onClick={ () => this.submitForm() }>Xác nhận</Button>
+                                    <Button color="primary" onClick={ () => this.dangKyChayXe() }>Xác nhận</Button>
                                     <Button color="secondary" onClick={this.toggle_dangKy}>Hủy</Button>
                                 </ModalFooter>
                                 </Modal>

@@ -4,7 +4,7 @@ const initState = false
 
 export default function datxe(state = initState, action) {
    switch (action.type) {
-      case types.DONGMO_CHIDUONG_DATXE:
+      case types.DONGMO_CHIDUONG_BACTAI:
          return !state
             
       default: 

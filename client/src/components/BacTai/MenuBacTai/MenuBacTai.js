@@ -30,12 +30,12 @@ class MenuBacTai extends Component {
    
    ChayXe_TamDung = (hanhDong) => {
       this.props.ChayXe_TamDung(hanhDong)
-      /*if(hanhDong === 'chayxe') {
+      if(hanhDong === 'chayxe') {
          this.setState({chayXe: true})
       }
       else if (hanhDong === 'tamdung') {
          this.setState({chayXe: false})
-      }*/
+      }
    }
 
    render() 

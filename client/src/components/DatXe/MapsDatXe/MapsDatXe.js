@@ -6,41 +6,37 @@ import 'leaflet/dist/leaflet.css'
 import 'leaflet/dist/leaflet.js'
 import L from 'leaflet'
 import viTri from '../../../../src/viTri.png'
-import diemDi from '../../../../src/diemDi.png'
-import diemDen from '../../../../src/diemDen.png'
-
 
 var viTri_icon = L.icon({
    iconUrl: viTri,
    iconSize: [30, 30],
 })
-var diemDi_icon = L.icon({
-   iconUrl: diemDi,
-   iconSize: [30, 30]
-})
-var diemDen_icon = L.icon({
-   iconUrl: diemDen,
-   iconSize: [30, 30]
-})
+
 class MapsDatXe extends Component {
    
-  render() {
-   console.log('Render')
-
-   const position = [this.props.vido, this.props.kinhdo];
-   return (
-      <div>
-         <Map center={position} className="bando"  zoom={15}>
-            <TileLayer
-               url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-               attribution="&copy; <a href=&quot;http://osm.org/copyright&quot;>OpenStreetMap</a> contributors"
-            />
-            <Marker position={position} icon={viTri_icon} >
-               <Popup>Đây là vị trí hiện tại của bạn</Popup>
-            </Marker>            
-         </Map>
-      </div>
-   );
-  }
+   render() {
+      console.log('Render MapsDatXe')
+      if(this.props.coToaDo === true) {
+         const position = [this.props.vido, this.props.kinhdo];
+         return (
+            <div>
+               <Map center={position} className="bando"  zoom={14}>
+                  <TileLayer
+                     url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                     attribution="&copy; <a href=&quot;http://osm.org/copyright&quot;>OpenStreetMap</a> contributors"
+                  />
+                  <Marker position={position} icon={viTri_icon} >
+                     <Popup>Đây là vị trí hiện tại của bạn</Popup>
+                  </Marker>            
+               </Map>
+            </div>
+         );
+      }
+      else {
+         return (
+            <div>Chưa có tọa độ</div>
+         )
+      }
+   }
 }
 export default MapsDatXe

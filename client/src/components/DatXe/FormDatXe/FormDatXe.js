@@ -41,14 +41,12 @@ class FormDatXe extends Component {
             this.setState({
                viTriDiemDi: res.data[0].display_name
             })
-            localStorage.setItem('viTriDiemDi', res.data[0].display_name)
-            
          })
       }
    }
    
    capNhat = () => {
-      this.props.capNhat_DatXeThanhCong()
+      this.props.datXe()
    }
 
    DatXe = () => {
@@ -64,9 +62,6 @@ class FormDatXe extends Component {
                localStorage.setItem('viTriDiemDi', response.data[0].display_name)
 
                axios.get(`https://nominatim.openstreetmap.org/search?format=json&q=${this.state.txt_diemDen}`).then(res=> {
-                  this.setState({
-                     viTriDiemDen: res.data[0].display_name
-                  })
                   localStorage.setItem('viDoDiemDen', res.data[0].lat)
                   localStorage.setItem('kinhDoDiemDen', res.data[0].lon)
                   localStorage.setItem('viTriDiemDen', res.data[0].display_name)
@@ -74,11 +69,16 @@ class FormDatXe extends Component {
                })
             })
          }
-         //Phần này hoàn thiện sau
+         
+         //Lấy vị trí hiện tại làm điểm đi
          else if(this.state.btn_layViTri === true && this.state.txt_sdt !== '' && this.state.txt_diemDen !== '') {
-            //this.props.guiYeuCauDatXe(this.state.txt_sdt, this.state.txt_diemDi, this.state.txt_diemDen, this.state.viTriDiemDi)
             localStorage.setItem('sdtKhachHang', this.state.txt_sdt)
+            localStorage.setItem('viDoDiemDi', this.props.viDo)
+            localStorage.setItem('kinhDoDiemDi', this.props.kinhDo)
+            localStorage.setItem('viTriDiemDi', this.state.viTriDiemDi)
             axios.get(`https://nominatim.openstreetmap.org/search?format=json&q=${this.state.txt_diemDen}`).then(res =>{
+               localStorage.setItem('viDoDiemDen', res.data[0].lat)
+               localStorage.setItem('kinhDoDiemDen', res.data[0].lon)
                localStorage.setItem('viTriDiemDen', res.data[0].display_name)
             })
             
