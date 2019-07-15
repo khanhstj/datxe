@@ -118,23 +118,13 @@ class BacTai extends Component {
    }
 
    DenNoi = () => {
-      axios.post('http://localhost:8797/hoan-tat-chuyen', {
-         bacTai: JSON.parse(localStorage.getItem('bactai')).username,
-         sdt_KH: this.state.sdt_KH,
-         viDoDi_KH: this.state.viDoDi_KH,
-         kinhDoDi_KH: this.state.kinhDoDi_KH,
-         viTriDiemDi_KH: this.state.viTriDiemDi_KH,
-         viDoDen_KH: this.state.viDoDen_KH,
-         kinhDoDen_KH: this.state.kinhDoDen_KH,
-         viTriDiemDen_KH: this.state.viTriDiemDen_KH,
-      })
-      
-      this.setState({
-         chayXe: false
-      })
+      axios.get(`http://localhost:8797/hoan-tat-chuyen?bacTai=${JSON.parse(localStorage.getItem('bactai')).username}&sdt_KH=${this.state.sdt_KH}&viTriDiemDi_KH=${this.state.viTriDiemDi_KH}&viTriDiemDen_KH=${this.state.viTriDiemDen_KH}`)
       
       this.socket.emit('tamdung', {
          username: JSON.parse(localStorage.getItem('bactai')).username
+      })
+      this.setState({
+         chayXe: false
       })
    }
 

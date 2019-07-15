@@ -1,13 +1,14 @@
-import React, { Component } from 'react';
-import MenuQuanLy from './MenuQuanLy/MenuQuanLy';
-import { Button, ButtonGroup, ButtonDropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap';
-import ChuyenDangCho from './QuanLyThongKeChuyen/ChuyenDangCho';
-import QuanLyBacTai from './QuanLyBacTai/QuanLyBacTai';
-import ThongKeTheoNgay from './ThongKeTheoNgay/ThongKeTheoNgay';
+import React, { Component } from 'react'
+import axios from 'axios'
 import {Redirect} from 'react-router-dom';
 import { connect } from 'react-redux'
+import { Button, ButtonGroup, ButtonDropdown, DropdownToggle, DropdownMenu, DropdownItem, Table } from 'reactstrap'
+//import ChuyenDangCho from './QuanLyThongKeChuyen/ChuyenDangCho';
+import QuanLyBacTai from './QuanLyBacTai/QuanLyBacTai'
+//import ThongKeTheoNgay from './ThongKeTheoNgay/ThongKeTheoNgay';
 import { actLuuDanhSachBacTai } from '../../actions/index'
-
+import MenuQuanLy from './MenuQuanLy/MenuQuanLy'
+import TableRowChuyenXe from './TableRowChuyenXe'
 
 class QuanLy extends Component {
     constructor(props) {
@@ -16,13 +17,24 @@ class QuanLy extends Component {
             dropDown_thongKe: false,
             state_bangbacTai: false,
             state_thongKeNgay: false,
-            state_thongKeChuyen: true,
+            capNhatLai: 0,
+            dSChuyenXe: [],
         };
         this.DongMoNutThongKe = this.DongMoNutThongKe.bind(this);        
     }
 
     componentWillMount() {
         this.props.luuDanhSachBacTai()
+        axios.get('http://localhost:8797/chuyen-gan-day')
+        .then(res => {
+            this.setState({
+                dSChuyenXe: res.data.result
+            })
+            
+        })
+        .catch(err => {
+            console.log(err)
+        })
     }
 
     DongMoNutThongKe() {
@@ -43,6 +55,7 @@ class QuanLy extends Component {
         this.setState({state_bangbacTai: false});
     }
 
+    /*
     QuanLy_Chucnang = () => {
         if(this.state.state_bangbacTai === true) {
             return <QuanLyBacTai/>
@@ -54,7 +67,47 @@ class QuanLy extends Component {
             return <ThongKeTheoNgay/>
         }
     }
+    */
 
+    ThongKe_Ngay = () => {
+        axios.get('http://localhost:8797/thong-ke-hom-nay')
+        .then(res => {
+            this.setState({
+                dSChuyenXe: res.data.result,
+                
+            })
+        })
+    }
+
+    ThongKe_Tuan = () => {
+        axios.get('http://localhost:8797/thong-ke-tuan-nay')
+        .then(res => {
+            this.setState({
+                dSChuyenXe: res.data.result,
+                
+            })
+        })
+    }
+
+    ThongKe_Thang = () => {
+        axios.get('http://localhost:8797/thong-ke-thang-nay')
+        .then(res => {
+            this.setState({
+                dSChuyenXe: res.data.result,
+                
+            })
+        })
+    }
+
+    ThongKe_MoiLuc = () => {
+        axios.get('http://localhost:8797/thong-ke-moi-luc')
+        .then(res => {
+            this.setState({
+                dSChuyenXe: res.data.result,
+                
+            })
+        })
+    }
     render() {
 
         if(!localStorage.getItem('quanly')) {
@@ -62,6 +115,7 @@ class QuanLy extends Component {
             return <Redirect to='/' />
         }
         else {
+            
             return (
                 <div>
                     <MenuQuanLy/>
@@ -72,18 +126,39 @@ class QuanLy extends Component {
                             <ButtonDropdown isOpen={this.state.dropDown_thongKe} toggle={this.DongMoNutThongKe}>
                                 <DropdownToggle color="info" caret>Thống kê chuyến</DropdownToggle>
                                 <DropdownMenu>
-                                <DropdownItem onClick={() => this.Nut_ThongKeNgay()}>Theo ngày</DropdownItem>
-                                <DropdownItem>Theo tuần</DropdownItem>
-                                <DropdownItem>Theo tháng</DropdownItem>
-                                <DropdownItem>Tất cả</DropdownItem>
+                                <DropdownItem onClick={() => this.ThongKe_Ngay()}>Hôm nay</DropdownItem>
+                                <DropdownItem onClick={() => this.ThongKe_Tuan()}>Tuần này</DropdownItem>
+                                <DropdownItem onClick={() => this.ThongKe_Thang()}>Tháng này</DropdownItem>
+                                <DropdownItem onClick={() => this.ThongKe_MoiLuc()}>Mọi lúc</DropdownItem>
                                 </DropdownMenu>
                             </ButtonDropdown>
                         </ButtonGroup>
                     </div>
     
-                    <div>
-                        { this.QuanLy_Chucnang() }                
-                    </div>
+                    {
+                        this.state.state_bangbacTai === true ?
+                        <QuanLyBacTai />
+                        :
+                        
+                        <Table hover responsive >
+                            <thead>
+                                <tr align="center"><th colSpan="6"><h4>Chuyến xe gần đây</h4></th></tr>
+                                <tr>
+                                    <th width="5%">STT</th>
+                                    <th width="10%" align="center">Bác tài</th>
+                                    <th width="10%">SĐT KH</th>
+                                    <th width="30%" align="center">Điểm đi</th>
+                                    <th width="30%">Điểm đến</th>
+                                    <th width="15%">Thời gian hoàn tất</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {this.DoDanhSach(this.state.dSChuyenXe)}
+                            </tbody>
+                        </Table>
+                        
+                    }
+                    
                 </div>
             );
         
@@ -91,6 +166,18 @@ class QuanLy extends Component {
         
         }
         
+    }
+    DoDanhSach = (danhsach) => {
+        if(danhsach.length > 0) {
+            const result = danhsach.map((chuyenxe, index) => 
+                <TableRowChuyenXe key={index} stt={index} sdtkh={chuyenxe.sdtkh} diemdi={chuyenxe.diemdi} diemden={chuyenxe.diemden} thoigianhoantat={chuyenxe.thoigianhoantat}>{chuyenxe.bactai}</TableRowChuyenXe>
+            );
+    
+            return result;
+        }
+        else {
+            return null
+        }
     }
 }
 
