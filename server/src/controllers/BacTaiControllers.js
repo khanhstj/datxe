@@ -10,7 +10,7 @@ exports.register = function(req, res, next){
                 if (err) {return next(err);}
                 
                 //Lưu file ảnh chân dung vào ổ cứng
-                let imageChanDung = req.files.fileChanDung;
+                /*let imageChanDung = req.files.fileChanDung;
                 imageChanDung.mv(`C:/Users/khanh/Desktop/DoAn/server/public/ChanDung/${req.body.username}.jpg`, function(err) {
                     if(err) {
                         return res.status(500).send(err);
@@ -25,7 +25,7 @@ exports.register = function(req, res, next){
                     }
                     
                 });
-
+                */
                 const user = new User(req.body)
                 user.trangthai = 'Chưa kích hoạt' //sau khi đăng ký thì trạng thái mặc định là chưa kích hoạt
                 user.password = hash;
@@ -35,7 +35,7 @@ exports.register = function(req, res, next){
                 
                 user.save((err, result) => {
                     if(err) {return res.json({err})}
-                    res.json('Đăng ký thành công')
+                    res.json({"signup": "thành công"})
                 })
             })
         } else{
@@ -51,22 +51,26 @@ exports.loginBacTai = function(req, res){
         }else if (!user){
             return res.json({'login': 'chưa đăng ký'}) 
         }
-        bcrypt.compare(req.body.password, user.password, (err, result) => {
-            if(result === true){
-                req.session.user = user
-                req.session.save(err => {
-                    if(err) {
-                        res.json(err)
-                    }
-                });
-                res.json({
-                    user: user,
-                    "login": "thành công"
-                })
-            }else{
-                return res.json({'login': 'không chính xác'})
-            }
-        })
+        else {
+            bcrypt.compare(req.body.password, user.password, (err, result) => {
+                if(result === true){
+                    /*req.session.user = user
+                    req.session.save(err => {
+                        if(err) {
+                            res.json(err)
+                        }
+                    });
+                    */
+                    res.json({
+                        user: user,
+                        'login': 'thành công'
+                    })
+                }
+                else {
+                    return res.json({'login': 'không chính xác'})
+                }
+            })
+        }
     })
 }
 

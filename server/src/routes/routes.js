@@ -3,6 +3,7 @@ const router = express.Router()
 
 const {register, loginBacTai, logoutBacTai, layDanhSachBacTai, khoaKichHoat} = require('../controllers/BacTaiControllers')
 const {ThemQuanLy, loginQuanLy, logoutQuanLy} = require('../controllers/QuanLyControllers')
+const { HoanTatChuyen, ChuyenGanDay, ChuyenHomNay, ChuyenTuanNay, ChuyenThangNay, ChuyenTatCa } = require('../controllers/ChuyenXeControllers')
 const {BacTaiValidator} = require('../validators/validator')
  
 router.post('/them-bac-tai', BacTaiValidator, register)
@@ -43,6 +44,8 @@ router.post('/danh-sach-bac-tai', layDanhSachBacTai)
 
 router.get('/khoa-kich-hoat', khoaKichHoat)
 
+router.get('/hoan-tat-chuyen', HoanTatChuyen)
+
 function requiresLoginQuanLy(req, res, next) {
     //if (req.session) {
         
@@ -53,5 +56,14 @@ function requiresLoginQuanLy(req, res, next) {
 }
 router.post('/quan-ly-dang-xuat', requiresLoginQuanLy, logoutQuanLy)
 
- 
+router.get('/chuyen-gan-day', ChuyenGanDay)
+
+router.get('/thong-ke-hom-nay', ChuyenHomNay)
+
+router.get('/thong-ke-tuan-nay', ChuyenTuanNay)
+
+router.get('/thong-ke-thang-nay', ChuyenThangNay)
+
+router.get('/thong-ke-moi-luc', ChuyenTatCa)
+
 module.exports = router;
