@@ -56,7 +56,7 @@ class TableRowBacTai extends Component {
                 <th>{this.props.children}</th>
                 <th>{this.props.hoten}</th>
                 <th>{this.props.soxe}</th>
-                <th>{this.state.trangthai}</th>
+                <th className="rowbactai">{this.state.trangthai}</th>
                 <th>{this.ChucNang()}</th>
             </tr>
         );
