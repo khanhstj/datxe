@@ -62,7 +62,6 @@ exports.ChuyenHomNay = function (req, res) {
 }
 
 exports.ChuyenTuanNay = function (req, res) {
-   console.log('Chuyến tuần này')
    let ngay = new Date()
    let thu = ngay.getDay() - 1
    let ngayDauTuan = new Date()
@@ -86,7 +85,6 @@ exports.ChuyenTuanNay = function (req, res) {
 }
 
 exports.ChuyenThangNay = function (req, res) {
-   console.log('Chuyến tháng này')
    let ngayDauThang = new Date()
    ngayDauThang.setDate(1)
    ngayDauThang.setHours(0)
@@ -109,7 +107,6 @@ exports.ChuyenThangNay = function (req, res) {
 }
 
 exports.ChuyenTatCa = function (req, res) {
-   console.log('Tất cả chuyến')
    const col = {"_id": 1, "bactai": 1, "sdtkh": 1, "diemdi": 1, "diemden": 1, "thoigianhoantat": 1}
    return ChuyenXe.find({}, col, (err, result) => {
       if(err) {
