@@ -63,11 +63,48 @@ exports.ChuyenHomNay = function (req, res) {
 
 exports.ChuyenTuanNay = function (req, res) {
    console.log('Chuyến tuần này')
-   
+   let ngay = new Date()
+   let thu = ngay.getDay() - 1
+   let ngayDauTuan = new Date()
+   ngayDauTuan.setDate(ngay.getDate() - thu)
+   ngayDauTuan.setHours(0)
+   ngayDauTuan.setMinutes(0)
+   ngayDauTuan.setSeconds(0)
+   ngayDauTuan.setMilliseconds(1)
+   console.log('Ngày đầu tuần: ' + ngayDauTuan)
+   let col = {"_id": 1, "bactai": 1, "sdtkh": 1, "diemdi": 1, "diemden": 1, "thoigianhoantat": 1}
+   return ChuyenXe.find({
+      thoigianhoantat: {$gte: ngayDauTuan}
+   }, col, (err, result) => {
+      if (err) {
+         return res.json({err})
+      }
+      else {
+         return res.json({result})
+      }
+   })
 }
 
 exports.ChuyenThangNay = function (req, res) {
    console.log('Chuyến tháng này')
+   let ngayDauThang = new Date()
+   ngayDauThang.setDate(1)
+   ngayDauThang.setHours(0)
+   ngayDauThang.setMinutes(0)
+   ngayDauThang.setSeconds(0)
+   ngayDauThang.setMilliseconds(1)
+   let col = {"_id": 1, "bactai": 1, "sdtkh": 1, "diemdi": 1, "diemden": 1, "thoigianhoantat": 1}
+   return ChuyenXe.find({
+      thoigianhoantat: {$gte: ngayDauThang}
+   }, col, (err, result) => {
+      if (err) {
+         return res.json({err})
+      }
+      else {
+         return res.json({result})
+      }
+   })
+
    
 }
 
